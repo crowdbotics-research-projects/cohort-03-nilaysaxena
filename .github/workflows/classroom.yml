@@ -39,4 +39,4 @@ jobs:
       env:
         RUN-PYTEST_RESULTS: "${{ steps.run-pytest.outputs.result }}"
       with:
-        runners: run-pytest,
+        runners: run-pytest
