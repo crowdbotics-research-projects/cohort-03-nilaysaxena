@@ -24,7 +24,9 @@ class MagazineBase(BaseModel):
     name: str
     description: str
     base_price: float
-    discount: float
+    discount_quarterly: float
+    discount_half_yearly: float
+    discount_annual: float
 
 
 class Magazine(MagazineBase):
@@ -66,6 +68,7 @@ class Subscription(SubscriptionBase):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    refresh_token: str
 
 
 class PasswordResetRequest(BaseModel):

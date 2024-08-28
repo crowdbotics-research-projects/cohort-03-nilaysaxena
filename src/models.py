@@ -18,7 +18,9 @@ class Magazine(Base):
     name = Column(String, index=True)
     description = Column(String)
     base_price = Column(Float)
-    discount = Column(Float)
+    discount_quarterly = Column(Float)
+    discount_half_yearly = Column(Float)
+    discount_annual = Column(Float)
 
 
 class Plan(Base):

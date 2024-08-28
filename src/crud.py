@@ -10,6 +10,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 
 def get_user_by_email(db: Session, email: str):
@@ -29,6 +30,21 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 def get_magazines(db: Session):
     return db.query(models.Magazine).all()
+
+
+def get_magazine(db: Session, magazine_id: int):
+    return db.query(models.Magazine).filter(models.Magazine.id == magazine_id).first()
+
+
+def delete_magazine(db: Session, magazine_id: int):
+    db_magazine = (
+        db.query(models.Magazine).filter(models.Magazine.id == magazine_id).first()
+    )
+    if db_magazine is None:
+        return None
+    db.delete(db_magazine)
+    db.commit()
+    return db_magazine
 
 
 def get_user_subscriptions(db: Session, user_id: int):
@@ -144,6 +160,7 @@ def update_subscription(
     if subscription:
         # Deactivate the current subscription
         subscription.is_active = False
+        subscription.price = subscription_update.price
         db.commit()
         db.refresh(subscription)
 
@@ -239,3 +256,22 @@ def delete_plan(db: Session, plan_id: int):
     db.delete(db_plan)
     db.commit()
     return db_plan
+
+
+def get_user_by_username(db: Session, username: str):
+    print(f"Querying for user with username: {username}")
+    user = db.query(models.User).filter(models.User.username == username).first()
+    print(f"User found: {user}")
+    return user
+
+
+def get_subscription(db: Session, subscription_id: int):
+    return (
+        db.query(models.Subscription)
+        .filter(models.Subscription.id == subscription_id)
+        .first()
+    )
+
+
+def get_all_subscriptions(db: Session):
+    return db.query(models.Subscription).all()
